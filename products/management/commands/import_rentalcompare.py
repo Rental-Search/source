@@ -58,19 +58,20 @@ class Command(BaseCommand):
     # Product descriptions will be built with this template
     PRODUCT_DESC_TEMPLATE=\
 """
-{{ description }}
+{{ description }}{% if width or height or length %}
 
-{% if width %}
+{% endif %} {% if width %}
 Width: {{ width }}"
-{% endif %}
-{% if height %}
+{% endif %} {% if height %}
 Height: {{ height }}"
-{% endif %}
-{% if length %}
+{% endif %} {% if length %}
 Length: {{ length }}"
-{% endif %}
-{% if weight %}
+{% endif %} {% if weight %}
 Weight: {{ weight }} lbs.
+{% endif %}{% if tags %}
+
+Tags:
+{{ tags }}
 {% endif %}
 """
     option_list = BaseCommand.option_list + (
@@ -485,8 +486,15 @@ Weight: {{ weight }} lbs.
                         c.execute("select * from ob_products where vendor_id=%(user_id)s order by date_lastaction desc limit %(quantity)s;", 
                                   {'user_id':rc_user.id,
                                    'quantity':lp})
-                            
+
                         RcProduct = self.get_product_type(c.column_names)
+                        class RcPreparedProduct():
+                            @classmethod
+                            def _make(clazz, iterable):
+                                res = RcProduct._make(iterable)
+                                res = res._replace(
+                                    tags=', '.join(sorted(list(set(tag.strip() for tag in res.tags.split(',') if tag)))))
+                                return res
                             
                         prod_chunk = c.fetchmany(size=min(self.PRODUCTS_CHUNK_SIZE, lp))
                         products = []
@@ -503,7 +511,7 @@ Weight: {{ weight }} lbs.
                                          " from generate_series(1,%(prod_count)s)",
                                          {'prod_count':len(prod_chunk)})
                             
-                            for (rc_product, (alloc_id, )) in izip(imap(RcProduct._make, prod_chunk), el_c):
+                            for (rc_product, (alloc_id, )) in izip(imap(RcPreparedProduct._make, prod_chunk), el_c):
                                 
                                 if rc_product.id in imported_products_ids:
                                     prod_skipped = prod_skipped + 1
@@ -516,7 +524,7 @@ Weight: {{ weight }} lbs.
                                     # desc/summary
                                     "summary": rc_product.name,
                                     "description": product_desc_template\
-                                        .render(Context(rc_product._asdict())), #TODO Add all attributes
+                                        .render(Context(rc_product._asdict())).strip(), #TODO Add all attributes
                                     # TODO caution
                                     "deposit_amount": 0, 
                                     # currency
