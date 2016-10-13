@@ -59,3 +59,31 @@ block append content-body
         include ../jade/_footer_links
       section.row-fluid.rss
         include ../jade/_rss
+
+block append tail
+  script
+    function send_tracklink(link, event) {
+      analytics.trackLink(link, event, {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
+    }
+
+    send_tracklink(document.getElementById('pro-popin-message-link'), "Pro Cost Request Modal");
+    send_tracklink(document.getElementById('pro-popin-phone-link'), "Pro Phone Modal");
+    send_tracklink(document.getElementById('pro-popin-shop-link'), "Pro Shop Modal");
+    send_tracklink(document.getElementById('pro-popin-website-link'), "Pro Website Link Redirected");
+
+    var pro_message_form = document.getElementById('proMessageForm');
+    if (typeof pro_message_form !== 'undefined') {
+      analytics.trackForm(pro_message_form, 'Pro Cost Request Sended', {
+        'owner id': '{{product.object.owner_id}}',
+        'company name': '{{product.object.owner.company_name}}',
+        'product category': '{{product.object.category}}',
+        'product summary': '{{product.object.summary}}',
+        'product id': '{{product.object.id}}'
+      });
+    }
