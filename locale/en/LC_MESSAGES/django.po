@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-13 01:00-0700\n"
+"POT-Creation-Date: 2016-10-14 00:35-0700\n"
 "PO-Revision-Date: 2015-11-10 13:00-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1071,6 +1071,7 @@ msgid "Your current password was entered incorrectly. Please enter it again."
 msgstr "Your current password was entered incorrectly. Please enter it again."
 
 #: accounts/serializers.py:254
+#, python-format
 msgid "Attribute missed or invalid: %s"
 msgstr "Attribute missed or invalid: %s"
 
@@ -6246,7 +6247,8 @@ msgstr "Previous page"
 msgid "Page suivante"
 msgstr "Next page"
 
-#: eloue/templates/jade/_professional_renter_content.jade:10, python-format
+#: eloue/templates/jade/_professional_renter_content.jade:10
+#, python-format
 msgid ""
 "\n"
 "\n"
@@ -6839,6 +6841,8 @@ msgid ""
 "Les prix sont sur devis. Demandez tout de suite votre devis ou rendez-vous "
 "sur le site du professionnel pour connaître ses tarifs."
 msgstr ""
+"Prices are on request. Request your price immediately or go to the "
+"professional site for more information."
 
 #: eloue/templates/products/tab_tarifs.jade:51
 msgid "1 mois*"
@@ -8036,6 +8040,14 @@ msgstr ""
 "\n"
 "<span></span><b>+331 85 08 99 77 </b> (customer services)\n"
 "        </li>\n"
+
+#: eloue/templates/us/products/tab_terms.jade:3
+msgid "Assurance de l'objet"
+msgstr "Insurance"
+
+#: eloue/templates/us/products/tab_terms.jade:4
+msgid "Prendre contact avec le professionnel pour connaître les garanties."
+msgstr "Contact the professional for warranties."
 
 #: payments/paybox_payment.py:43
 #, python-brace-format
