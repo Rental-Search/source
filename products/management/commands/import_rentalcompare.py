@@ -822,6 +822,7 @@ Tags:
         
         
     def handle_index(self):
+        from haystack import connections as haystack_connections
         from products.search_indexes import ProductIndex
         from accounts.search_indexes import PatronIndex
         
@@ -829,14 +830,18 @@ Tags:
         prodi = ProductIndex()
         
         irs = self.get_record_queryset()
+
+        backend = haystack_connections['algolia'].get_backend()
         
         if not irs.count():
             self.stdout.write("Nothing to index.", ending='\n')
             return
         
+
+
         for ir in irs:
-            map(pati.update_object, Patron.objects.filter(import_record=ir))
-            map(prodi.update_object, Product.objects.filter(import_record=ir))
+            backend.update(prodi, Product.objects.filter(import_record=ir))
+            backend.update(pati, Patron.objects.filter(import_record=ir))
             
         self.stdout.write("Done.", ending='\n')
         
