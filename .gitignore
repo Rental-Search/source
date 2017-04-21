@@ -1,4 +1,6 @@
 *~
+*.tmp
+*.log
 *.pyc
 *.swp
 *.tmproj
