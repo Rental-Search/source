@@ -1,4 +1,4 @@
-E-Loue
+E-Loue   Installation
 ======
 
 Pré-requis
