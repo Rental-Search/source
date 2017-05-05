@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-14 00:35-0700\n"
-"PO-Revision-Date: 2015-11-10 13:00-0800\n"
+"PO-Revision-Date: 2017-05-05 08:12-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -1467,7 +1467,7 @@ msgstr "Page"
 msgid ""
 "Trouvez toutes les annonces de location près de chez vous (particuliers et "
 "professionnels)"
-msgstr "Find all renting items near you (particular and professionals"
+msgstr "Find Rentals Near You"
 
 #: eloue/templates/accounts/password_reset_confirm.jade:8
 msgid "Mise à jour du mot de passe effectuée"
@@ -4214,7 +4214,7 @@ msgstr "Sign in"
 
 #: eloue/templates/dk/jade/_product_list.jade:3
 msgid "annonces de location dans toute la France"
-msgstr "Available throughout the U.S."
+msgstr "Available Throughout North America"
 
 #: eloue/templates/dk/jade/_product_list.jade:25
 #: eloue/templates/dressbooking/jade/_product_list.jade:25
@@ -5812,7 +5812,7 @@ msgstr ""
 #: eloue/templates/gosport/jade/_homepage_carousel_banner.jade:4
 #: eloue/templates/jade/_homepage_carousel_banner.jade:4
 msgid "Trouvez toutes les annonces de location près de chez vous"
-msgstr "Find rentals near you"
+msgstr "Find Rentals Near You"
 
 #: eloue/templates/gosport/jade/_nav_home.jade:15
 #: eloue/templates/jade/_nav_home.jade:15
@@ -6136,7 +6136,7 @@ msgstr "Rooms"
 
 #: eloue/templates/jade/_product_list.jade:3
 msgid "Annonces de location dans toute la France"
-msgstr "available throughout the U.S."
+msgstr "Available Throughout North America"
 
 # ?  not sure
 #: eloue/templates/jade/_product_list_article_head.jade:2
