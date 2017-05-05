@@ -1,9 +1,9 @@
 -load staticfiles i18n
   
-section.framing(ng-controller="CookiesCtrl")
-    div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
-        a(href="/conditions-generales-particuliers/#cookies") {% trans "cliquez ici" %}
-        span.cross(ng-click="acceptCookies(true)") &#10006;
+//-section.framing(ng-controller="CookiesCtrl")
+//-    div.header-site.cookies-alert.ng-hide(ng-show="showCookiesRibbon") {% trans "En poursuivant votre navigation, vous acceptez l’utilisation des cookies pour disposer de services et d’offres adaptées à vos centres d’intérêts. Pour en savoir plus,&nbsp;" %}
+//-        a(href="/conditions-generales-particuliers/#cookies") {% trans "cliquez ici" %}
+//-        span.cross(ng-click="acceptCookies(true)") &#10006;
 
 section(ng-controller="AuthCtrl").container.signs-links
   //- version of header for anonymous user
@@ -89,5 +89,5 @@ section(ng-controller="AuthCtrl").container.signs-links
           input(type="text", name="l", value="{{ form.cleaned_data.l }}", placeholder="{{ where }}", title="{% if form.cleaned_data.l %}{{ where }}{% endif %}").form-control#geolocate
         .table-cell.input-group-btn
           button(type="submit", default).btn.bg-success.btn-advertise.btn-default.btn-search: i.flaticon.stroke.zoom-2
-    .table-cell
-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposer mes annonces" %}
+//-    .table-cell
+//-      button(type="button", onclick="location.href='{% url 'publish_item' %}';").btn.bg-primary.btn-advertise {% trans "Déposer mes annonces" %}
