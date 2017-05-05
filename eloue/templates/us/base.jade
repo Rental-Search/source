@@ -3,9 +3,9 @@
 doctype 5
 html(lang="en-US")
   head
-    <meta name="apple-itunes-app" content="app-id=427538545">
-    <meta name="google-play-app" content="app-id=com.eloue.appandroid">
-    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
+//-    <meta name="apple-itunes-app" content="app-id=427538545">
+//-    <meta name="google-play-app" content="app-id=com.eloue.appandroid">
+//-    <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/ios-icon.jpeg">
     
 
 
@@ -59,12 +59,7 @@ html(lang="en-US")
                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
            })();
       {% if not debug %}
-//-   script
-          window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-          d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-          _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
-          $.src='//v2.zopim.com/?WgwK6edNrVndm09BEcS9eHH77YcyszBK';z.t=+new Date;$.
-          type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+//-               Chat Code Goes Here
       {% endif %}
       script
           var form = document.getElementById('searh-form');
