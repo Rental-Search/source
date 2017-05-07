@@ -1,4 +1,4 @@
-E-Loue   Installation      new us-production
+E-Loue   Installation     
 ======
 
 Pré-requis
