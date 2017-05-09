@@ -35,8 +35,7 @@ block append content-body
       main
 
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
-        //-section.professional-renter-content.framing: 
-		     include ./jade/_professional_renter_content
+        //-section.professional-renter-content.framing: include ./jade/_professional_renter_content
         //-section.download-mobile-apps: include ./jade/_download_mobile_apps
         //-section.float-comments.framing
           include ./jade/_comments
@@ -44,11 +43,10 @@ block append content-body
 
         {% cache 43200 'homepage_city_list_static' LANGUAGE_CODE %}
         //-section.location-list
-            include ./jade/_location_list
+          include ./jade/_location_list
         {% endcache %}
 
-        //-section.talk-about-us: 
-		  include ./jade/_talk_about_us
+        //-section.talk-about-us: include ./jade/_talk_about_us
         {% endcache %}
 
     footer

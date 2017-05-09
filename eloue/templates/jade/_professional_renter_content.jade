@@ -1,19 +1,19 @@
 -load i18n
-//.container
-//	.row
-//		.col-sm-8
-//			{% blocktrans %}
-//			h3
-//				| Vous êtes loueur professionnel ?
-//				br
-//				| Nous aussi !
-//			{% endblocktrans %}
-//			{% url 'subscription' as subscription_url %}
-//			{% blocktrans %}
-//			p
-//				| e-loue est le premier site de location 100% adapté aux professionnels. Nos membres viennent chercher tout type de produit à louer, dans toute la France. Les plus grands loueurs nous font déjà confiance, alors pourquoi pas vous ? 
-//			a(href="{{ subscription_url }}").link-success-color En savoir plus
-//			{% endblocktrans %}
-//		.col-sm-4
-//			.img-wrapper
-//				a(href="{{ subscription_url }}").link-sprite
+.container
+	.row
+		.col-sm-8
+			{% blocktrans %}
+			h3
+				| Vous êtes loueur professionnel ?
+				br
+				| Nous aussi !
+			{% endblocktrans %}
+			{% url 'subscription' as subscription_url %}
+			{% blocktrans %}
+			p
+				| e-loue est le premier site de location 100% adapté aux professionnels. Nos membres viennent chercher tout type de produit à louer, dans toute la France. Les plus grands loueurs nous font déjà confiance, alors pourquoi pas vous ? 
+			a(href="{{ subscription_url }}").link-success-color En savoir plus
+			{% endblocktrans %}
+		.col-sm-4
+			.img-wrapper
+				a(href="{{ subscription_url }}").link-sprite
