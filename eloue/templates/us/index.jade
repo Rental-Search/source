@@ -1,9 +1,9 @@
-k,,,,,     m,extends ./base
+extends ./base
 -load compressed prefixed_cache i18n
 
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block title %}{% trans "Trouvez toutes les annonces de location près de chez vous" %}{% endblock %}
+{% block title %}{% trans "Trouvez toutes les annonces de location près de chez vous (particuliers et professionnels)" %}{% endblock %}
 
 block append styles
   {% compressed_css "bootstrap" %}
@@ -36,7 +36,7 @@ block append content-body
 
         {% cache 43200 'homepage_main_static' LANGUAGE_CODE %}
         //-section.professional-renter-content.framing: 
-		//-  include ./jade/_professional_renter_content
+		     include ./jade/_professional_renter_content
         //-section.download-mobile-apps: include ./jade/_download_mobile_apps
         //-section.float-comments.framing
           include ./jade/_comments
@@ -48,7 +48,7 @@ block append content-body
         {% endcache %}
 
         //-section.talk-about-us: 
-		//-  include ./jade/_talk_about_us
+		  include ./jade/_talk_about_us
         {% endcache %}
 
     footer
