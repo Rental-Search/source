@@ -54,15 +54,15 @@ html(lang="en-US")
            })();
       {% if not debug %}
 //-               Chat Code Goes Here
-//-      {% endif %}
-//-      script
-//-          var form = document.getElementById('searh-form');
-//-          if (form != 'undefined') {
-//-            analytics.trackForm(form, 'Search', {
-//-             'what': document.getElementsByClassName('what-field')[0].value,
-//-              'where': document.getElementById('geolocate').value
-//-            });
-//-          }
+      {% endif %}
+      script
+          var form = document.getElementById('searh-form');
+          if (form != 'undefined') {
+            analytics.trackForm(form, 'Search', {
+             'what': document.getElementsByClassName('what-field')[0].value,
+              'where': document.getElementById('geolocate').value
+            });
+         }
       //Facebook Pixel Code
       script
         !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
