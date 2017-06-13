@@ -31,7 +31,7 @@ django-debug-toolbar==0.9.4
 -e git://github.com/e-loue/django-faq.git#egg=faq
 -e git://github.com/e-loue/django-haystack.git@1.2.X#egg=haystack
 django-fsm==1.4.1
--e git://github.com/e-loue/django-oauth-plus.git#egg=django-oauth-plus
+-e git://github.com/eugenehp/django-oauth-plus.git#egg=django-oauth-plus
 django-storages==1.1.5
 -e git://github.com/e-loue/django-tastypie.git#egg=tastypie
 -e git://github.com/e-loue/django-lean.git#egg=django_lean
@@ -49,6 +49,6 @@ django-redis-cache==0.5.0
 -e git://github.com/e-loue/django-messages.git#egg=django-messages
 -e git://github.com/e-loue/python-sdk.git#egg=facebook-sdk
 -e git://github.com/e-loue/django-qsstats-magic.git#egg=qsstats
-PIL
+Pillow
 beautifulsoup4
 google-api-python-client

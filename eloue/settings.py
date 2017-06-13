@@ -10,7 +10,7 @@ from eloue.settings_utils import algolia_category_facets, \
 
 local_path = lambda path: os.path.join(os.path.dirname(__file__), path)
 
-DEBUG = env('DEBUG', False)
+DEBUG = env('DEBUG', True)
 STAGING = env('STAGING', False)
 CLIENT_EXCEPTION_LOGGING = env('CLIENT_EXCEPTION_LOGGING', False)
 DEBUG_TOOLBAR = env('DEBUG_TOOLBAR', DEBUG)
@@ -213,7 +213,7 @@ PASSWORD_HASHERS =(
     'django.contrib.auth.hashers.CryptPasswordHasher'
 )
 
-SSLIFY_DISABLE = env('SSLIFY_DISABLE', False)
+SSLIFY_DISABLE = env('SSLIFY_DISABLE', True)
 
 if DEBUG_TOOLBAR:
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)

@@ -3,7 +3,7 @@ PyYAML>=3.10
 psycopg2>=2.5.1
 ipython>=0.10
 coverage==3.7.1
-django-nose==1.2
+django-nose==1.4.4
 nosexcover==1.0.10
 fabric==1.8.3
 geopy==0.99
@@ -14,7 +14,7 @@ mock==1.0.1
 pylint==1.2.1
 xlrd==0.9.3
 pyPdf==1.13
-reportlab==3.1.8
+reportlab==3.4.0
 south==0.8.4
 sphinx==1.2.2
 unittest2==0.5.1
@@ -38,7 +38,7 @@ django-haystack==2.2.1
 django-messages==0.5.0
 httplib2==0.9
 oauth2==1.5.211
-django-oauth-plus==2.2.4
+-e git://github.com/eugenehp/django-oauth-plus.git#egg=django-oauth-plus
 django-storages==1.1.8
 boto==2.29.1
 django-fsm==2.2.0
